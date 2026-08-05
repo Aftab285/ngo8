@@ -193,8 +193,25 @@ export default function Home() {
 
       <section className="sponsors wrap" id="sponsors">
         <div className="section-heading"><span /> <h2>Our sponsors</h2> <span /></div>
-        <div className="sponsor-marquee" aria-label="SDAASC sponsors"><div className="sponsor-grid">{[...sponsors, ...sponsors].map((sponsor, index) => <div className="sponsor-logo has-logo" aria-hidden={index >= sponsors.length} key={`${sponsor.name}-${index}`}><Image className="sponsor-image" src={sponsor.logo} alt={index < sponsors.length ? sponsor.name : ""} width={320} height={120} /></div>)}</div></div>
-        <p>Interested in becoming a sponsor? <a href="#contact">Partner with us <ArrowRight size={15} /></a></p>
+        <div className="sponsor-container">
+          <div className="sponsor-desktop-grid">
+            {sponsors.map((sponsor) => (
+              <div className="sponsor-card" key={sponsor.name}>
+                <Image className="sponsor-image" src={sponsor.logo} alt={sponsor.name} width={280} height={90} />
+              </div>
+            ))}
+          </div>
+          <div className="sponsor-marquee" aria-label="SDAASC sponsors">
+            <div className="sponsor-grid">
+              {[...sponsors, ...sponsors].map((sponsor, index) => (
+                <div className="sponsor-logo has-logo" aria-hidden={index >= sponsors.length} key={`${sponsor.name}-${index}`}>
+                  <Image className="sponsor-image" src={sponsor.logo} alt={index < sponsors.length ? sponsor.name : ""} width={280} height={90} />
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+        <p className="sponsor-cta">Interested in becoming a sponsor? <a href="#contact">PARTNER WITH US <ArrowRight size={15} /></a></p>
       </section>
 
       <section className="final-cta">
