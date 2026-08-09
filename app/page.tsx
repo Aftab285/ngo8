@@ -1,9 +1,15 @@
+"use client";
+
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import {
   ArrowRight,
+  ArrowUp,
   ArrowUpRight,
   Award,
   Building2,
+  ChevronLeft,
+  ChevronRight,
   Dumbbell,
   Handshake,
   HandHeart,
@@ -11,7 +17,6 @@ import {
   HeartHandshake,
   Landmark,
   Menu,
-  Medal,
   ShieldCheck,
   Sparkles,
   Star,
@@ -20,6 +25,7 @@ import {
   UserRoundCheck,
   UsersRound,
   Volleyball,
+  X,
 } from "lucide-react";
 
 const pillars = [
@@ -82,6 +88,18 @@ const sponsors = [
 ];
 
 export default function Home() {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+  const [showScrollTop, setShowScrollTop] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowScrollTop(window.scrollY > 400);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
     <main>
       <header className="site-header">
@@ -100,9 +118,41 @@ export default function Home() {
             <a href="#gallery">Gallery</a>
           </nav>
           <a className="donate" href="#about">Donate <Heart size={15} strokeWidth={2.5} /></a>
-          <button className="menu" aria-label="Open menu"><Menu /></button>
+          <button className="menu" onClick={() => setMobileMenuOpen(true)} aria-label="Open mobile menu">
+            <Menu size={26} />
+          </button>
         </div>
       </header>
+
+      {/* Mobile Drawer Navigation */}
+      {mobileMenuOpen && (
+        <div className="mobile-drawer-overlay" onClick={() => setMobileMenuOpen(false)}>
+          <div className="mobile-drawer" onClick={(e) => e.stopPropagation()}>
+            <div className="mobile-drawer-header">
+              <div className="brand">
+                <Image src="/images/sdaasc-logo.png" alt="SDAASC" width={48} height={48} />
+                <span>San Diego<br />Asian American<br />Sports Club</span>
+              </div>
+              <button className="close-btn" onClick={() => setMobileMenuOpen(false)} aria-label="Close menu">
+                <X size={24} />
+              </button>
+            </div>
+            <nav className="mobile-nav-links">
+              <a href="#home" onClick={() => setMobileMenuOpen(false)}>Home</a>
+              <a href="#about" onClick={() => setMobileMenuOpen(false)}>About Us</a>
+              <a href="#programs" onClick={() => setMobileMenuOpen(false)}>Events & Programs</a>
+              <a href="#impact" onClick={() => setMobileMenuOpen(false)}>Our Impact</a>
+              <a href="#gallery" onClick={() => setMobileMenuOpen(false)}>Gallery</a>
+              <a href="#sponsors" onClick={() => setMobileMenuOpen(false)}>Sponsors</a>
+              <a href="#contact" onClick={() => setMobileMenuOpen(false)}>Contact Us</a>
+              <a className="donate" href="#about" onClick={() => setMobileMenuOpen(false)}>
+                Donate <Heart size={15} strokeWidth={2.5} />
+              </a>
+            </nav>
+          </div>
+        </div>
+      )}
+
       <section className="hero" id="home">
         <div className="hero-overlay" />
         <div className="hero-content wrap">
@@ -187,9 +237,42 @@ export default function Home() {
       <section className="memories wrap" id="gallery">
         <div className="section-heading"><span /> <h2>A community of memories</h2> <span /></div>
         <div className="memory-grid">
-          {memories.map((image, index) => <div className="memory-photo" key={image}><Image src={image} alt={`SDAASC community memory ${index + 1}`} fill sizes="(max-width: 760px) 50vw, 16vw" /></div>)}
+          {memories.map((image, index) => (
+            <div className="memory-photo" key={image} onClick={() => setLightboxIndex(index)} role="button" aria-label={`View full memory photo ${index + 1}`}>
+              <Image src={image} alt={`SDAASC community memory ${index + 1}`} fill sizes="(max-width: 760px) 50vw, 16vw" />
+              <div className="memory-overlay"><Sparkles size={20} /></div>
+            </div>
+          ))}
         </div>
       </section>
+
+      {/* Lightbox Modal */}
+      {lightboxIndex !== null && (
+        <div className="lightbox-overlay" onClick={() => setLightboxIndex(null)}>
+          <div className="lightbox-content" onClick={(e) => e.stopPropagation()}>
+            <button className="lightbox-close" onClick={() => setLightboxIndex(null)} aria-label="Close image">
+              <X size={24} />
+            </button>
+            <button
+              className="lightbox-nav prev"
+              onClick={() => setLightboxIndex((prev) => (prev === null ? 0 : (prev - 1 + memories.length) % memories.length))}
+              aria-label="Previous image"
+            >
+              <ChevronLeft size={30} />
+            </button>
+            <div className="lightbox-image-container">
+              <Image src={memories[lightboxIndex]} alt={`SDAASC memory ${lightboxIndex + 1}`} width={960} height={640} className="lightbox-image" priority />
+            </div>
+            <button
+              className="lightbox-nav next"
+              onClick={() => setLightboxIndex((prev) => (prev === null ? 0 : (prev + 1) % memories.length))}
+              aria-label="Next image"
+            >
+              <ChevronRight size={30} />
+            </button>
+          </div>
+        </div>
+      )}
 
       <section className="sponsors wrap" id="sponsors">
         <div className="section-heading"><span /> <h2>Our sponsors</h2> <span /></div>
@@ -216,13 +299,34 @@ export default function Home() {
 
       <footer id="contact">
         <div className="footer-content wrap">
-          <div className="footer-brand"><Image src="/images/sdaasc-logo.png" alt="SDAASC" width={64} height={64} /><div><strong>San Diego Asian American Sports Club (SDAASC)</strong><span>P.O. Box 20116, San Diego, CA 92198</span><span>info@sdaasc.org</span></div></div>
-          <div className="social"><strong>Follow us</strong><span>Facebook · Instagram · LinkedIn</span></div>
+          <div className="footer-brand">
+            <Image src="/images/sdaasc-logo.png" alt="SDAASC" width={64} height={64} />
+            <div>
+              <strong>San Diego Asian American Sports Club (SDAASC)</strong>
+              <span>P.O. Box 20116, San Diego, CA 92198</span>
+              <a href="mailto:info@sdaasc.org" className="footer-email">info@sdaasc.org</a>
+            </div>
+          </div>
+          <div className="social">
+            <strong>Follow us</strong>
+            <span>Facebook · Instagram · LinkedIn</span>
+          </div>
           <p>SDAASC is a 501(c)(3) nonprofit organization. Funds raised support programs, events, and community service.</p>
           <a className="donate" href="#home">Donate <Heart size={15} strokeWidth={2.5} /></a>
         </div>
         <div className="copyright">© 2025 San Diego Asian American Sports Club (SDAASC). All Rights Reserved.</div>
       </footer>
+
+      {/* Floating Back to Top Button */}
+      {showScrollTop && (
+        <button
+          className="scroll-top-btn"
+          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+          aria-label="Scroll to top"
+        >
+          <ArrowUp size={20} />
+        </button>
+      )}
     </main>
   );
 }
