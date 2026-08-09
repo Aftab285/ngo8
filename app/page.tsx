@@ -113,11 +113,11 @@ export default function Home() {
             <a href="#about">About Us</a>
             <a href="#programs">Events</a>
             <a href="#programs">Programs</a>
-            <a href="#about">Get Involved</a>
+            <a href="mailto:DAYSINNVT@yahoo.com?subject=New%20Member%20Interest">Get Involved</a>
             <a href="#sponsors">Sponsors</a>
             <a href="#gallery">Gallery</a>
           </nav>
-          <a className="donate" href="#about">Donate <Heart size={15} strokeWidth={2.5} /></a>
+          <a className="donate" href="mailto:dpatel@dpalaw.com?subject=Donation%20Inquiry%20-%20SDAASC">Donate <Heart size={15} strokeWidth={2.5} /></a>
           <button className="menu" onClick={() => setMobileMenuOpen(true)} aria-label="Open mobile menu">
             <Menu size={26} />
           </button>
@@ -144,8 +144,8 @@ export default function Home() {
               <a href="#impact" onClick={() => setMobileMenuOpen(false)}>Our Impact</a>
               <a href="#gallery" onClick={() => setMobileMenuOpen(false)}>Gallery</a>
               <a href="#sponsors" onClick={() => setMobileMenuOpen(false)}>Sponsors</a>
-              <a href="#contact" onClick={() => setMobileMenuOpen(false)}>Contact Us</a>
-              <a className="donate" href="#about" onClick={() => setMobileMenuOpen(false)}>
+              <a href="mailto:DAYSINNVT@yahoo.com?subject=New%20Member%20Interest" onClick={() => setMobileMenuOpen(false)}>Get Involved</a>
+              <a className="donate" href="mailto:dpatel@dpalaw.com?subject=Donation%20Inquiry%20-%20SDAASC" onClick={() => setMobileMenuOpen(false)}>
                 Donate <Heart size={15} strokeWidth={2.5} />
               </a>
             </nav>
@@ -161,7 +161,7 @@ export default function Home() {
           <p className="hero-copy">A 501(c)(3) nonprofit organization dedicated to strengthening our community through sports, culture, leadership, and service.</p>
           <div className="hero-actions">
             <a className="button gold" href="#about">About us</a>
-            <a className="button outline" href="#programs">Get involved <ArrowRight size={16} /></a>
+            <a className="button outline" href="mailto:DAYSINNVT@yahoo.com?subject=New%20Member%20Interest">Get involved <ArrowRight size={16} /></a>
           </div>
         </div>
       </section>
@@ -183,7 +183,6 @@ export default function Home() {
           <p>The San Diego Asian American Sports Club (SDAASC) is a 501(c)(3) nonprofit dedicated to strengthening our community through athletics, culture, leadership, and service.</p>
           <p>Founded on the belief that sports have the power to unite people from all backgrounds, SDAASC creates opportunities for individuals and families to build lifelong friendships, promote healthy lifestyles, celebrate cultural heritage, and give back to the communities we serve.</p>
           <p>While volleyball remains one of our signature events, our mission extends far beyond the court. We are committed to building a stronger, more connected community where individuals can compete, lead, volunteer, and thrive together.</p>
-          <a className="text-link" href="#mission">Learn more about us <ArrowRight size={16} /></a>
         </div>
         <div className="about-art" aria-label="SDAASC players and community members">
           <Image src="/images/hero.png" alt="SDAASC athletes and community members" fill sizes="(max-width: 800px) 100vw, 50vw" />
@@ -285,7 +284,7 @@ export default function Home() {
             ))}
           </div>
         </div>
-        <p className="sponsor-cta">Interested in becoming a sponsor? <a href="#contact">PARTNER WITH US <ArrowRight size={15} /></a></p>
+        <p className="sponsor-cta">Interested in becoming a sponsor? <a href="mailto:DAYSINNVT@yahoo.com?subject=Sponsorship%20Inquiry">PARTNER WITH US <ArrowRight size={15} /></a></p>
       </section>
 
       <section className="final-cta">
@@ -293,7 +292,10 @@ export default function Home() {
           <p className="eyebrow">Join our community</p>
           <h2>There&apos;s a place for you<br />in the SDAASC family.</h2>
           <p>Whether you&apos;re an athlete, volunteer, sponsor, or supporter, let&apos;s build a legacy of unity, leadership, and service together.</p>
-          <div><a className="button gold" href="#programs">Get involved <ArrowRight size={16} /></a><a className="button outline" href="#sponsors">Become a sponsor</a></div>
+          <div>
+            <a className="button gold" href="mailto:DAYSINNVT@yahoo.com?subject=New%20Member%20Interest">Get involved <ArrowRight size={16} /></a>
+            <a className="button outline" href="mailto:DAYSINNVT@yahoo.com?subject=Sponsorship%20Inquiry">Become a sponsor</a>
+          </div>
         </div>
       </section>
 
@@ -304,15 +306,12 @@ export default function Home() {
             <div>
               <strong>San Diego Asian American Sports Club (SDAASC)</strong>
               <span>P.O. Box 20116, San Diego, CA 92198</span>
-              <a href="mailto:info@sdaasc.org" className="footer-email">info@sdaasc.org</a>
+              <span>Donations: <a href="mailto:dpatel@dpalaw.com" className="footer-email">dpatel@dpalaw.com</a></span>
+              <span>Member & Sponsor Inquiries: <a href="mailto:DAYSINNVT@yahoo.com" className="footer-email">DAYSINNVT@yahoo.com</a></span>
             </div>
           </div>
-          <div className="social">
-            <strong>Follow us</strong>
-            <span>Facebook · Instagram · LinkedIn</span>
-          </div>
           <p>SDAASC is a 501(c)(3) nonprofit organization. Funds raised support programs, events, and community service.</p>
-          <a className="donate" href="#home">Donate <Heart size={15} strokeWidth={2.5} /></a>
+          <a className="donate" href="mailto:dpatel@dpalaw.com?subject=Donation%20Inquiry%20-%20SDAASC">Donate <Heart size={15} strokeWidth={2.5} /></a>
         </div>
         <div className="copyright">© 2025 San Diego Asian American Sports Club (SDAASC). All Rights Reserved.</div>
       </footer>
