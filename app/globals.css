@@ -15,10 +15,11 @@ body { margin:0; background:var(--paper); color:#12213c; font-family:'Source San
 .nav nav a { color:#fff; text-decoration:none; text-transform:uppercase; font:500 10px/1 Montserrat,sans-serif; letter-spacing:.1px; padding:14px 0; position:relative; opacity:.96; transition:color .2s ease; }
 .nav nav a:hover { color:var(--gold); }
 .nav nav a.active:after { background:var(--gold); content:''; height:3px; position:absolute; bottom:0; left:0; right:0; }
-.donate, .button { display:inline-flex; align-items:center; justify-content:center; gap:8px; text-decoration:none; text-transform:uppercase; font:500 11px/1 Montserrat,sans-serif; letter-spacing:.1px; transition:transform .2s ease, background-color .2s ease, box-shadow .2s ease; }
-.donate { color:#fff; background:var(--gold); padding:12px 17px; border-radius:5px; }
-.donate:hover, .gold:hover { background:#d49f25; transform:translateY(-1px); box-shadow:0 4px 12px rgba(230,174,50,.35); }
-.outline:hover { border-color:#fff; background:rgba(255,255,255,.1); transform:translateY(-1px); }
+.donate, .button { display:inline-flex; align-items:center; justify-content:center; gap:8px; text-decoration:none; text-transform:uppercase; font:600 11px/1 Montserrat,sans-serif; letter-spacing:.2px; padding:12px 20px; border-radius:5px; cursor:pointer; border:none; transition:transform .2s ease, background-color .2s ease, box-shadow .2s ease, border-color .2s ease, color .2s ease; }
+.donate, .button.gold { color:#fff; background:var(--gold); border:1px solid var(--gold); }
+.donate:hover, .button.gold:hover { background:#d49f25; border-color:#d49f25; color:#fff; transform:translateY(-1px); box-shadow:0 4px 12px rgba(230,174,50,.35); }
+.button.outline { background:transparent; color:#fff; border:1.5px solid rgba(255,255,255,.7); }
+.button.outline:hover { border-color:#fff; background:rgba(255,255,255,.15); color:#fff; transform:translateY(-1px); }
 .menu { display:none; color:#fff; background:rgba(255,255,255,.1); border:0; border-radius:6px; padding:6px; cursor:pointer; transition:background .2s ease; }
 .menu:hover { background:rgba(255,255,255,.2); }
 
@@ -247,6 +248,8 @@ footer { color:#fff; background:#031d48; }
 .cookie-inline-link { background:none; border:none; color:var(--gold); font-weight:600; cursor:pointer; text-decoration:underline; padding:0 2px; font-size:inherit; }
 .cookie-inline-link:hover { color:#fff; }
 .cookie-banner-actions { display:flex; align-items:center; gap:10px; flex-shrink:0; }
+.cookie-banner-actions .button.outline, .cookie-modal-footer .button.outline { background:rgba(255,255,255,.08); color:#ffffff !important; border:1.5px solid rgba(255,255,255,.6); }
+.cookie-banner-actions .button.outline:hover, .cookie-modal-footer .button.outline:hover { background:#ffffff !important; color:#031d48 !important; border-color:#ffffff !important; }
 .button.text-btn { background:none; border:none; color:#dce5f0; text-decoration:underline; font-size:11px; cursor:pointer; padding:8px 12px; }
 .button.text-btn:hover { color:var(--gold); }
 
