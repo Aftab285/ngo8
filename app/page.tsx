@@ -92,6 +92,16 @@ export default function Home() {
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
   const [showScrollTop, setShowScrollTop] = useState(false);
 
+  // Cookie Consent States
+  const [showCookieBanner, setShowCookieBanner] = useState(false);
+  const [showCookieSettingsModal, setShowCookieSettingsModal] = useState(false);
+  const [showPrivacyPolicyModal, setShowPrivacyPolicyModal] = useState(false);
+  const [cookiePreferences, setCookiePreferences] = useState({
+    essential: true,
+    performance: false,
+    functional: false,
+  });
+
   useEffect(() => {
     const handleScroll = () => {
       setShowScrollTop(window.scrollY > 400);
@@ -99,6 +109,42 @@ export default function Home() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  useEffect(() => {
+    const savedConsent = localStorage.getItem("sdaasc_cookie_consent");
+    if (savedConsent) {
+      try {
+        const parsed = JSON.parse(savedConsent);
+        setCookiePreferences(parsed);
+      } catch {
+        setShowCookieBanner(true);
+      }
+    } else {
+      setShowCookieBanner(true);
+    }
+  }, []);
+
+  const handleAcceptAll = () => {
+    const allConsent = { essential: true, performance: true, functional: true };
+    setCookiePreferences(allConsent);
+    localStorage.setItem("sdaasc_cookie_consent", JSON.stringify(allConsent));
+    setShowCookieBanner(false);
+    setShowCookieSettingsModal(false);
+  };
+
+  const handleRejectNonEssential = () => {
+    const essentialOnly = { essential: true, performance: false, functional: false };
+    setCookiePreferences(essentialOnly);
+    localStorage.setItem("sdaasc_cookie_consent", JSON.stringify(essentialOnly));
+    setShowCookieBanner(false);
+    setShowCookieSettingsModal(false);
+  };
+
+  const handleSavePreferences = () => {
+    localStorage.setItem("sdaasc_cookie_consent", JSON.stringify(cookiePreferences));
+    setShowCookieBanner(false);
+    setShowCookieSettingsModal(false);
+  };
 
   return (
     <main>
@@ -313,7 +359,18 @@ export default function Home() {
           <p>SDAASC is a 501(c)(3) nonprofit organization. Funds raised support programs, events, and community service.</p>
           <a className="donate" href="mailto:dpatel@dpalaw.com?subject=Donation%20Inquiry%20-%20SDAASC">Donate <Heart size={15} strokeWidth={2.5} /></a>
         </div>
-        <div className="copyright">© 2025 San Diego Asian American Sports Club (SDAASC). All Rights Reserved.</div>
+        <div className="copyright">
+          © 2025 San Diego Asian American Sports Club (SDAASC). All Rights Reserved.
+          <span className="copyright-links">
+            <button className="footer-link-btn" onClick={() => setShowCookieSettingsModal(true)}>
+              Cookie Settings
+            </button>
+            <span>·</span>
+            <button className="footer-link-btn" onClick={() => setShowPrivacyPolicyModal(true)}>
+              Privacy Policy
+            </button>
+          </span>
+        </div>
       </footer>
 
       {/* Floating Back to Top Button */}
@@ -325,6 +382,140 @@ export default function Home() {
         >
           <ArrowUp size={20} />
         </button>
+      )}
+
+      {/* Cookie Consent Banner */}
+      {showCookieBanner && (
+        <aside className="cookie-banner" aria-label="Cookie Consent Banner">
+          <div className="cookie-banner-wrap wrap">
+            <div className="cookie-banner-text">
+              <p>
+                We use cookies and similar technologies to support the operation of our website and improve your browsing experience. You can accept all cookies or reject non-essential cookies. For more information, please see our{" "}
+                <button className="cookie-inline-link" onClick={() => setShowPrivacyPolicyModal(true)}>
+                  Privacy Policy
+                </button>.
+              </p>
+            </div>
+            <div className="cookie-banner-actions">
+              <button className="button gold" onClick={handleAcceptAll}>
+                Accept All
+              </button>
+              <button className="button outline" onClick={handleRejectNonEssential}>
+                Reject Non-Essential
+              </button>
+              <button className="button text-btn" onClick={() => setShowCookieSettingsModal(true)}>
+                Cookie Settings
+              </button>
+            </div>
+          </div>
+        </aside>
+      )}
+
+      {/* Cookie Settings Modal */}
+      {showCookieSettingsModal && (
+        <div className="cookie-modal-overlay" onClick={() => setShowCookieSettingsModal(false)}>
+          <div className="cookie-modal" onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true" aria-labelledby="cookie-settings-title">
+            <div className="cookie-modal-header">
+              <h2 id="cookie-settings-title">Cookie Preferences</h2>
+              <button className="close-btn" onClick={() => setShowCookieSettingsModal(false)} aria-label="Close cookie settings">
+                <X size={22} />
+              </button>
+            </div>
+            <div className="cookie-modal-body">
+              <p className="cookie-modal-intro">
+                Customize your cookie preferences below. Essential cookies are necessary for the website to function properly and remain enabled.
+              </p>
+              
+              <div className="cookie-option">
+                <div className="cookie-option-info">
+                  <strong>Essential Cookies</strong>
+                  <span>Required for basic site operation, security, and accessibility features.</span>
+                </div>
+                <div className="cookie-toggle locked">
+                  <ShieldCheck size={16} /> Always Active
+                </div>
+              </div>
+
+              <div className="cookie-option">
+                <div className="cookie-option-info">
+                  <strong>Performance & Analytics Cookies</strong>
+                  <span>Optional cookies used to analyze site performance and aggregate visitor traffic metrics.</span>
+                </div>
+                <label className="switch">
+                  <input
+                    type="checkbox"
+                    checked={cookiePreferences.performance}
+                    onChange={(e) => setCookiePreferences((prev) => ({ ...prev, performance: e.target.checked }))}
+                  />
+                  <span className="slider round"></span>
+                </label>
+              </div>
+
+              <div className="cookie-option">
+                <div className="cookie-option-info">
+                  <strong>Functional Preferences</strong>
+                  <span>Optional cookies that remember user choices and layout preferences.</span>
+                </div>
+                <label className="switch">
+                  <input
+                    type="checkbox"
+                    checked={cookiePreferences.functional}
+                    onChange={(e) => setCookiePreferences((prev) => ({ ...prev, functional: e.target.checked }))}
+                  />
+                  <span className="slider round"></span>
+                </label>
+              </div>
+            </div>
+            <div className="cookie-modal-footer">
+              <button className="button outline" onClick={handleSavePreferences}>
+                Save Preferences
+              </button>
+              <button className="button gold" onClick={handleAcceptAll}>
+                Accept All
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Privacy Policy Modal */}
+      {showPrivacyPolicyModal && (
+        <div className="cookie-modal-overlay" onClick={() => setShowPrivacyPolicyModal(false)}>
+          <div className="cookie-modal privacy-modal" onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true" aria-labelledby="privacy-policy-title">
+            <div className="cookie-modal-header">
+              <h2 id="privacy-policy-title">Privacy Policy</h2>
+              <button className="close-btn" onClick={() => setShowPrivacyPolicyModal(false)} aria-label="Close privacy policy">
+                <X size={22} />
+              </button>
+            </div>
+            <div className="cookie-modal-body privacy-body">
+              <h3>San Diego Asian American Sports Club (SDAASC)</h3>
+              <p className="effective-date"><strong>Effective Date:</strong> January 1, 2025</p>
+              <p>The San Diego Asian American Sports Club (SDAASC) is a 501(c)(3) nonprofit organization committed to protecting your privacy. This Privacy Policy explains how we handle your information and respect your cookie choices when you visit our website.</p>
+              
+              <h4>1. Information We Collect</h4>
+              <p>We only collect personal information that you voluntarily provide to us when contacting us regarding membership, events, sponsorship, or donations (such as your name, email address, and message details).</p>
+              
+              <h4>2. How We Use Cookies & Local Storage</h4>
+              <p>We use essential cookies and local storage to support website navigation, ensure security, and store your cookie consent preferences. Essential cookies remain enabled as they are necessary for the website to function. Non-essential cookies are only activated with your explicit consent.</p>
+              
+              <h4>3. Data Sharing & Third Parties</h4>
+              <p>SDAASC does not sell, trade, or rent personal information to third parties. We do not use advertising tracking networks or external data brokers.</p>
+              
+              <h4>4. Contact Us</h4>
+              <p>If you have questions regarding this Privacy Policy or wish to manage your information, please contact us at:</p>
+              <ul>
+                <li><strong>Donations:</strong> <a href="mailto:dpatel@dpalaw.com" className="footer-email">dpatel@dpalaw.com</a></li>
+                <li><strong>Membership & Sponsorships:</strong> <a href="mailto:DAYSINNVT@yahoo.com" className="footer-email">DAYSINNVT@yahoo.com</a></li>
+              </ul>
+            </div>
+            <div className="cookie-modal-footer">
+              <button className="button gold" onClick={() => setShowPrivacyPolicyModal(false)}>
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </main>
   );
