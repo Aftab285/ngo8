@@ -371,6 +371,12 @@ export default function Home() {
             </button>
           </span>
         </div>
+        <div className="aiws-footer-credit">
+          Designed &amp; Developed by{" "}
+          <a href="https://www.aiwebsiteservice.com/" target="_blank" rel="noopener noreferrer">
+            AIWebsiteService
+          </a>
+        </div>
       </footer>
 
       {/* Floating Back to Top Button */}
