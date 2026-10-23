@@ -7,7 +7,9 @@ import {
   ArrowUp,
   ArrowUpRight,
   Award,
+  Bell,
   Building2,
+  Calendar,
   ChevronLeft,
   ChevronRight,
   Dumbbell,
@@ -16,6 +18,8 @@ import {
   Heart,
   HeartHandshake,
   Landmark,
+  MapPin,
+  Megaphone,
   Menu,
   ShieldCheck,
   Sparkles,
@@ -87,10 +91,71 @@ const sponsors = [
   { name: "DRA Attorneys at Law", logo: "/images/sponsors/dra-law.png" },
 ];
 
+const announcements = [
+  {
+    id: "announcement-1",
+    title: "2026 National Volleyball Tournament — Team Registration Now Open",
+    category: "Tournaments",
+    status: "Registration Open",
+    date: "Nov 14 – 15, 2026",
+    location: "San Diego Regional Sports Complex",
+    copy: "Early-bird team registration is officially open for our 2026 flagship volleyball tournament! Welcoming adult, collegiate, and club divisions from across the country for elite competition, cultural fellowship, and community awards.",
+    actionText: "Register Your Team",
+    actionLink: "mailto:DAYSINNVT@yahoo.com?subject=2026%20National%20Volleyball%20Tournament%20Registration",
+    icon: Volleyball,
+    isFeatured: true,
+  },
+  {
+    id: "announcement-2",
+    title: "Youth Volleyball & Leadership Fall Development Clinic",
+    category: "Youth & Clinics",
+    status: "Now Enrolling",
+    date: "Saturdays, Oct 31 – Nov 21, 2026",
+    location: "Miramar Sports Pavilion, San Diego",
+    copy: "A 4-week weekend athletic development program designed for middle and high school athletes. Led by former collegiate athletes and coaches, focusing on skill fundamentals, leadership, and sportsmanship.",
+    actionText: "Enroll Student Athlete",
+    actionLink: "mailto:DAYSINNVT@yahoo.com?subject=Youth%20Clinic%20Enrollment",
+    icon: Sparkles,
+    isFeatured: false,
+  },
+  {
+    id: "announcement-3",
+    title: "Annual Community Thanksgiving Food Drive & Volunteer Day",
+    category: "Community & Charity",
+    status: "Volunteer Call",
+    date: "Saturday, November 21, 2026",
+    location: "Balboa Park Activity Center & Local Food Banks",
+    copy: "Join the SDAASC family as we assemble and distribute nutritious holiday meal boxes to vulnerable families across San Diego County. Volunteer shifts and non-perishable drop-offs are open.",
+    actionText: "Sign Up to Volunteer",
+    actionLink: "mailto:DAYSINNVT@yahoo.com?subject=Thanksgiving%20Food%20Drive%20Volunteer",
+    icon: HandHeart,
+    isFeatured: false,
+  },
+  {
+    id: "announcement-4",
+    title: "2026-2027 SDAASC Corporate & Community Sponsorship Campaign",
+    category: "Community & Charity",
+    status: "Open Invitation",
+    date: "Season 2026 – 2027",
+    location: "Greater San Diego Area",
+    copy: "Partner with SDAASC to empower local Asian American youth, promote healthy lifestyles, and gain visibility across our major tournaments, uniforms, banners, and digital platforms.",
+    actionText: "Become a Sponsor",
+    actionLink: "mailto:DAYSINNVT@yahoo.com?subject=Sponsorship%20Inquiry%202026-2027",
+    icon: Handshake,
+    isFeatured: false,
+  },
+];
+
 export default function Home() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
   const [showScrollTop, setShowScrollTop] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState("All");
+
+  const filteredAnnouncements =
+    selectedCategory === "All"
+      ? announcements
+      : announcements.filter((a) => a.category === selectedCategory);
 
   // Cookie Consent States
   const [showCookieBanner, setShowCookieBanner] = useState(false);
@@ -157,6 +222,7 @@ export default function Home() {
           <nav aria-label="Main navigation">
             <a className="active" href="#home">Home</a>
             <a href="#about">About Us</a>
+            <a href="#announcements">Announcements</a>
             <a href="#programs">Events</a>
             <a href="#programs">Programs</a>
             <a href="mailto:DAYSINNVT@yahoo.com?subject=New%20Member%20Interest">Get Involved</a>
@@ -186,6 +252,7 @@ export default function Home() {
             <nav className="mobile-nav-links">
               <a href="#home" onClick={() => setMobileMenuOpen(false)}>Home</a>
               <a href="#about" onClick={() => setMobileMenuOpen(false)}>About Us</a>
+              <a href="#announcements" onClick={() => setMobileMenuOpen(false)}>Announcements</a>
               <a href="#programs" onClick={() => setMobileMenuOpen(false)}>Events & Programs</a>
               <a href="#impact" onClick={() => setMobileMenuOpen(false)}>Our Impact</a>
               <a href="#gallery" onClick={() => setMobileMenuOpen(false)}>Gallery</a>
@@ -212,7 +279,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="pillars wrap" id="programs" aria-label="Our values">
+      <section className="pillars wrap" id="values" aria-label="Our values">
         {pillars.map(({ icon: Icon, title, copy }) => (
           <article className="pillar" key={title}>
             <Icon aria-hidden="true" />
@@ -220,6 +287,88 @@ export default function Home() {
             <p>{copy}</p>
           </article>
         ))}
+      </section>
+
+      <section className="announcements wrap" id="announcements" aria-label="Club announcements">
+        <div className="section-heading"><span /> <h2>Latest Announcements</h2> <span /></div>
+        <div className="announcements-header">
+          <p className="eyebrow"><Megaphone size={13} style={{ display: "inline-block", verticalAlign: "middle", marginRight: 5 }} /> Club Updates &amp; Notices</p>
+          <p className="announcements-intro">
+            Stay up to date with upcoming tournaments, youth athletic clinics, volunteer initiatives, and club partnership announcements.
+          </p>
+        </div>
+
+        <div className="announcements-filters" role="tablist" aria-label="Announcement categories">
+          {["All", "Tournaments", "Youth & Clinics", "Community & Charity"].map((cat) => (
+            <button
+              key={cat}
+              role="tab"
+              aria-selected={selectedCategory === cat}
+              className={`filter-tab ${selectedCategory === cat ? "active" : ""}`}
+              onClick={() => setSelectedCategory(cat)}
+            >
+              {cat}
+            </button>
+          ))}
+        </div>
+
+        <div className="announcements-grid">
+          {filteredAnnouncements.map((item) => {
+            const Icon = item.icon;
+            const statusClass = item.status.toLowerCase().replace(/\s+/g, "-");
+            return (
+              <article key={item.id} className={`announcement-card ${item.isFeatured ? "featured" : ""}`}>
+                <div>
+                  <div className="announcement-meta-top">
+                    <span className="announcement-cat">
+                      <Icon size={14} aria-hidden="true" />
+                      {item.category}
+                    </span>
+                    <span className={`announcement-status ${statusClass}`}>
+                      {item.status}
+                    </span>
+                  </div>
+
+                  <h3 className="announcement-title">{item.title}</h3>
+
+                  <div className="announcement-info-row">
+                    <span className="announcement-info-item">
+                      <Calendar size={15} aria-hidden="true" />
+                      {item.date}
+                    </span>
+                    <span className="announcement-info-item">
+                      <MapPin size={15} aria-hidden="true" />
+                      {item.location}
+                    </span>
+                  </div>
+
+                  <p className="announcement-copy">{item.copy}</p>
+                </div>
+
+                <div className="announcement-footer">
+                  <a className="announcement-cta" href={item.actionLink}>
+                    {item.actionText} <ArrowRight size={14} aria-hidden="true" />
+                  </a>
+                </div>
+              </article>
+            );
+          })}
+        </div>
+
+        <div className="announcements-notice">
+          <div className="announcements-notice-left">
+            <div className="announcements-notice-icon">
+              <Bell size={20} />
+            </div>
+            <div className="announcements-notice-text">
+              <h4>Have an announcement or community initiative to share?</h4>
+              <p>We welcome community collaboration, tournament partnerships, and volunteer initiatives.</p>
+            </div>
+          </div>
+          <a className="button gold" href="mailto:DAYSINNVT@yahoo.com?subject=Community%20Announcement%20Inquiry">
+            Contact communications team <ArrowRight size={14} />
+          </a>
+        </div>
       </section>
 
       <section className="about wrap" id="about">
